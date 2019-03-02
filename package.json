@@ -1,0 +1,10 @@
+{
+  "name": "leap-guardian",
+  "version": "1.0.0",
+  "author": "LeapDAO",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "leap-core": "^0.28.1",
+    "web3": "1.0.0-beta.34"
+  }
+}
