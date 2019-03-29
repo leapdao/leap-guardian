@@ -4,7 +4,9 @@
   "author": "LeapDAO",
   "license": "MPL-2.0",
   "dependencies": {
+    "ethereumjs-util": "^6.1.0",
     "leap-core": "^0.28.1",
+    "truffle-hdwallet-provider": "^1.0.6",
     "web3": "1.0.0-beta.34"
   }
 }
