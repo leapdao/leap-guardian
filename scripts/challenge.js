@@ -1,14 +1,14 @@
 const Web3 = require('web3');
 const { Tx, helpers, Util } = require('leap-core');
+const { getRootNetworkProvider } = require('./utils');
 
 const exitHandlerAbi = require('../abis/exitHandler');
 
-module.exports = async function(exitTxHash, spendTxHash, nodeUrl, providerUrl, privKey, validatorAddr) {
-  const web3 = new Web3(providerUrl);
+module.exports = async function(exitTxHash, spendTxHash, nodeUrl, privKey, validatorAddr) {
   const plasmaWeb3 = helpers.extendWeb3(new Web3(nodeUrl));
-  const account = web3.eth.accounts.wallet.add(privKey);
-
   const nodeConfig = await plasmaWeb3.getConfig();
+  const web3 = new Web3(getRootNetworkProvider(nodeConfig));
+  const account = web3.eth.accounts.wallet.add(privKey);
   const exitHandler = new web3.eth.Contract(exitHandlerAbi, nodeConfig.exitHandlerAddr);
 
   console.log(`exitHandler=${nodeConfig.exitHandlerAddr}`);
