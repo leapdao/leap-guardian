@@ -1,8 +1,7 @@
 const Web3 = require('web3');
-const { Tx, Input, Output, Outpoint, Period, helpers, Util } = require('leap-core');
+const { Tx, helpers, Util } = require('leap-core');
 
-const exitHandlerAbi = require('./exitHandler');
-
+const exitHandlerAbi = require('../abis/exitHandler');
 
 module.exports = async function(exitTxHash, spendTxHash, nodeUrl, providerUrl, privKey, validatorAddr) {
   const web3 = new Web3(providerUrl);
