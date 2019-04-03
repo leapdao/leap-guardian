@@ -24,42 +24,68 @@ const { helpers, Tx, Output, Outpoint } = require('leap-core');
 const nodeUrl = process.env.NODE_URL;
 const privKey = process.env.PRIV_KEY;
 const numberOfTx = process.env.NUM || 1;
+const provider = new ethers.providers.JsonRpcProvider(process.env['NODE_URL']);
+const account = new ethers.Wallet(privKey);
+
+let lastUTXOLen = 0;
+let round = 0;
+
+async function fire () {
+  let utxos;
+
+  try {
+    process.stdout.write(`\x1b[1K\x1b[1G🔫 Machinegunning: fetching unspents Round(${round + 1}/${numberOfTx})`);
+    utxos = await provider.send('plasma_unspent', [account.address]);
+  } catch (e) {
+    console.log('error fetching unspents', e);
+    return false;
+  }
+
+  if (utxos.length === 0) {
+    throw new Error(`Not enough balance for machine gun. Send some LEAPs to ${account.address}`);
+  }
+
+  if (lastUTXOLen == utxos.length) {
+    process.stdout.write(`\x1b[1K\x1b[1G🔫 Machinegunning: no new UTXOs yet Round(${round + 1}/${numberOfTx})`);
+    return false;
+  }
+  lastUTXOLen = utxos.length;
+
+  for (let x = 0; x < utxos.length; x++) {
+    const utxo = utxos[x];
+    const outpoint = Outpoint.fromRaw(utxo.outpoint);
+    const output = Output.fromJSON(utxo.output);
+    const tx = Tx.transferFromUtxos(
+      [{ output, outpoint }], account.address, account.address, 1, output.color
+    ).signAll(privKey);
+
+    process.stdout.write(`\x1b[1K\x1b[1G🔫 Machinegunning: UTXO(${x + 1}/${utxos.length}) Round(${round + 1}/${numberOfTx})`);
+
+    // const txHash = await provider.send('eth_sendRawTransaction', [tx.hex()]);
+    provider.send('eth_sendRawTransaction', [tx.hex()]);
+  }
+
+  return true;
+}
 
 async function run() {
-  const provider = new ethers.providers.JsonRpcProvider(process.env['NODE_URL']);
-  const account = new ethers.Wallet(privKey);
+  while (round < numberOfTx) {
+    const ok = await fire();
 
-  let lastUTXOLen = 0;
-
-  for (let i = 0; i < numberOfTx; i += 1) {
-    const utxos = await provider.send('plasma_unspent', [account.address]);
-
-    if (utxos.length === 0) {
-      throw new Error(`Not enough balance for machine gun. Send some LEAPs to ${account.address}`);
+    if (ok) {
+      round++;
     }
 
-    if (lastUTXOLen == utxos.length) {
-      process.stdout.write(`\x1b[1K\x1b[1G🔫 Machinegunning: no new UTXOs yet Round(${i + 1}/${numberOfTx})`);
-      i--;
-      continue;
-    }
-    lastUTXOLen = utxos.length;
-
-    for (let x = 0; x < utxos.length; x++) {
-      const utxo = utxos[x];
-      const outpoint = Outpoint.fromRaw(utxo.outpoint);
-      const output = Output.fromJSON(utxo.output);
-      const tx = Tx.transferFromUtxos(
-        [{ output, outpoint }], account.address, account.address, 1, output.color
-      ).signAll(privKey);
-
-      process.stdout.write(`\x1b[1K\x1b[1G🔫 Machinegunning: UTXO(${x + 1}/${utxos.length}) Round(${i + 1}/${numberOfTx})`);
-
-      // const txHash = await provider.send('eth_sendRawTransaction', [tx.hex()]);
-      provider.send('eth_sendRawTransaction', [tx.hex()]);
-    }
+    await new Promise((resolve) => setTimeout(() => resolve(), 300));
   }
   console.log();
 }
+
+function onException (e) {
+  console.error(e);
+}
+
+process.on('uncaughtException', onException);
+process.on('unhandledRejection', onException);
 
 run();
