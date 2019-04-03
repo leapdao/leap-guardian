@@ -29,6 +29,7 @@ const account = new ethers.Wallet(privKey);
 
 let lastUTXOLen = 0;
 let round = 0;
+let missCount = 0;
 
 async function fire () {
   let utxos;
@@ -46,6 +47,14 @@ async function fire () {
   }
 
   if (lastUTXOLen == utxos.length) {
+    missCount++;
+
+    if (missCount > 3) {
+      // skip round
+      missCount = 0;
+      return true;
+    }
+
     process.stdout.write(`\x1b[1K\x1b[1G🔫 Machinegunning: no new UTXOs yet Round(${round + 1}/${numberOfTx})`);
     return false;
   }
