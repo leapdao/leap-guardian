@@ -1,4 +1,5 @@
 const NETWORKS = require('./networks');
+const waitForBalanceChange = require('./waitForBalanceChange');
 
 const getRootNetworkProvider = (nodeConfig) => {
   const network = NETWORKS[nodeConfig.rootNetworkId];
@@ -6,4 +7,4 @@ const getRootNetworkProvider = (nodeConfig) => {
   return nodeConfig.rootNetwork;
 };
 
-module.exports = { getRootNetworkProvider };
+module.exports = { getRootNetworkProvider, waitForBalanceChange };
