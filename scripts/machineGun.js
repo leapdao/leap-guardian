@@ -18,31 +18,17 @@
  * Example: NUM=5 NODE_URL=http://localhost:8645 PRIV_KEY=0xbd54b17c48ac1fc91d5ef2ef02e9911337f8758e93c801b619e5d178094486cc node scripts/machineGun.js
  */
 
-const Web3 = require('web3');
-const { helpers, Tx } = require('leap-core');
+const plasmaTransfer = require('./plasmaTransfer');
 
-const nodeUrl = process.env.NODE_URL;
-const privKey = process.env.PRIV_KEY;
-const numberOfTx = process.env.NUM || 1;
-
-async function run() {
-  const plasmaWeb3 = helpers.extendWeb3(new Web3(nodeUrl));
-  const account = plasmaWeb3.eth.accounts.wallet.add(privKey);
-
+module.exports = run = async (numberOfTx, wallet) => {
+    
   for (let i = 0; i < numberOfTx; i += 1) {
-    const utxos = await plasmaWeb3.getUnspent(account.address);
-
-    if (utxos.length === 0) {
-      throw new Error(`Not enough balance for machine gun. Send some LEAPs to ${account.address}`);
-    }
-
-    const tx = Tx.transferFromUtxos(utxos, account.address, account.address, 100, 0).signAll(privKey);
-
-    process.stdout.write(`\r🔫 Machinegunning: ${i + 1}/${numberOfTx}`);
-
-    await plasmaWeb3.eth.sendSignedTransaction(tx.hex())
+    process.stdout.write(`\r🔫 Machinegunning: ${i}/${numberOfTx}`);
+    await plasmaTransfer(wallet.address, 1, 0, wallet);
   }
   console.log();
-}
+};
 
-run();
+if (require.main === module) {
+  run(process.env.NUM || 1, require('./utils/wallet')());
+}
