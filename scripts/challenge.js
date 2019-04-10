@@ -2,7 +2,7 @@ const Web3 = require('web3');
 const { Tx, helpers, Util } = require('leap-core');
 const { getRootNetworkProvider } = require('./utils');
 
-const exitHandlerAbi = require('../abis/exitHandler');
+const exitHandlerAbi = require('../abis/exitHandlerAbi');
 
 module.exports = async function(exitTxHash, spendTxHash, nodeUrl, privKey, validatorAddr) {
   const plasmaWeb3 = helpers.extendWeb3(new Web3(nodeUrl));

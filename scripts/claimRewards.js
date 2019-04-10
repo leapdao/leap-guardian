@@ -7,7 +7,7 @@ const {
   privateToAddress,
 } = require('ethereumjs-util');
 const bridgeABI = require('../abis/bridgeAbi');
-const operatorABI = require('../abis/operator');
+const operatorABI = require('../abis/operatorAbi');
 
 const BATCH_SIZE = 50;
 const swapAddr = process.env.SWAP_ADDR;

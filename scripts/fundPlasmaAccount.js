@@ -28,8 +28,8 @@ const { getRootNetworkProvider, waitForBalanceChange } = require('./utils');
 const plasmaTransfer = require('./plasmaTransfer');
 const getPlasmaWallet = require('./utils/wallet');
 
-const exitHandlerAbi = require('../abis/exitHandler');
-const tokenAbi = require('../abis/erc20');
+const exitHandlerAbi = require('../abis/exitHandlerAbi');
+const tokenAbi = require('../abis/erc20Abi');
 
 const privKey = process.env.PRIV_KEY;
 const plasmaAddr = process.env.PLASMA_ADDR;

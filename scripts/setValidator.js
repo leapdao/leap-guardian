@@ -28,8 +28,8 @@
 const ethers = require('ethers');
 const { getRootNetworkProvider } = require('./utils');
 
-const operatorAbi = require('../abis/operator');
-const governanceAbi = require('../abis/minGov');
+const operatorAbi = require('../abis/operatorAbi');
+const governanceAbi = require('../abis/minGovAbi');
 
 const nodeUrl = process.env.NODE_URL || 'http://localhost:8645';
 
