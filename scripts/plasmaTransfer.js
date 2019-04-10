@@ -36,7 +36,7 @@ const run = async (to, amount, color, wallet) => {
     utxos, wallet.address, to, amount.toString(), color,
   ).signAll(wallet.privateKey);
 
-  wallet.provider.send('eth_sendRawTransaction', [tx.hex()]);
+  await wallet.provider.send('eth_sendRawTransaction', [tx.hex()]);
 }
 
 module.exports = run;
