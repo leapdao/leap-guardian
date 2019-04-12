@@ -24,6 +24,11 @@ async function run() {
     .on('end', async () => {
         for(let i = 0; i < balances.length; i++) {
             console.log('Dispensng', balances[i].Balance, 'LEAP to', balances[i].Address);
+            balance = await getBalance(balances[i].Address, rpc);
+            if (String(balance) !== '0') {
+                console.log('   Address already funded(', String(balance), '). Skipping.');
+                continue;
+            } 
             await sendFunds(dispenser, balances[i].Address, balances[i].Balance, rpc);
             balance = await getBalance(balances[i].Address, rpc);
             if (String(balance) === balances[i].Balance) {
