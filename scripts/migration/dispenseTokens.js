@@ -4,7 +4,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const { sendFunds, getBalance } = require ('./helpers');
 
-const nodeUrl = "http://node1.testnet.leapdao.org:8645";
+const nodeUrl = process.argv[2] ? process.argv[2] : "https://testnet-node.leapdao.org";
 const rpc = new ethers.providers.JsonRpcProvider(nodeUrl);
 const dispenser = { 
     address: 'PUT DISPENSER ADDRESS HERE',
