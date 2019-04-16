@@ -42,5 +42,15 @@ const run = async (to, amount, color, wallet) => {
 module.exports = run;
 
 if (require.main === module) {
-  run(process.env.TO, process.env.AMOUNT, process.env.COLOR || 0, require('./utils/wallet')());
+  (async () => {
+
+    const { plasmaWallet } = await require('./utils/wallet')();
+
+    run(
+      process.env.TO, 
+      process.env.AMOUNT, 
+      process.env.COLOR || 0,
+      plasmaWallet,
+    );
+  })();
 }

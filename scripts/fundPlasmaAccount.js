@@ -24,42 +24,37 @@
  */
 
 const ethers = require('ethers');
-const { getRootNetworkProvider, waitForBalanceChange } = require('./utils');
+const { waitForBalanceChange } = require('./utils');
 const plasmaTransfer = require('./plasmaTransfer');
-const getPlasmaWallet = require('./utils/wallet');
+const getWallet = require('./utils/wallet');
 
 const exitHandlerAbi = require('../abis/exitHandlerAbi');
 const tokenAbi = require('../abis/erc20Abi');
 
-const privKey = process.env.PRIV_KEY;
 const plasmaAddr = process.env.PLASMA_ADDR;
 
 async function run() {
-  const plasmaWallet = getPlasmaWallet();
+  const { plasmaWallet, rootWallet, nodeConfig } = await getWallet();
+  const { address } = rootWallet;
 
-  const nodeConfig = await plasmaWallet.provider.send('plasma_getConfig', []);
-  
-  const root = new ethers.providers.JsonRpcProvider(getRootNetworkProvider(nodeConfig));
-  const wallet = new ethers.Wallet(privKey, root);
-  
   const { exitHandlerAddr } = nodeConfig;
 
-  const exitHandler = new ethers.Contract(exitHandlerAddr, exitHandlerAbi, wallet);
+  const exitHandler = new ethers.Contract(exitHandlerAddr, exitHandlerAbi, rootWallet);
   const tokenAddr = await exitHandler.getTokenAddr(0);
-  const token = new ethers.Contract(tokenAddr, tokenAbi, wallet);
+  const token = new ethers.Contract(tokenAddr, tokenAbi, rootWallet);
 
   const amount = ethers.utils.parseEther('1.0');
   
   console.log('Fund account on plasma');
   console.log('   Minting..');
-  await token.mint(wallet.address, amount).then(tx => tx.wait());
+  await token.mint(address, amount).then(tx => tx.wait());
   console.log('   Approving..');
   await token.approve(exitHandlerAddr, amount).then(tx => tx.wait());
 
   console.log('   Depositing..');
-  const currentBalance = await plasmaWallet.provider.getBalance(wallet.address).then(res => Number(res));
-  await exitHandler.deposit(wallet.address, amount, 0).then(tx => tx.wait());
-  await waitForBalanceChange(wallet.address, currentBalance, plasmaWallet.provider);  
+  const currentBalance = await plasmaWallet.provider.getBalance(address).then(res => Number(res));
+  await exitHandler.deposit(address, amount, 0).then(tx => tx.wait());
+  await waitForBalanceChange(address, currentBalance, plasmaWallet.provider);  
   
   console.log('   Transfering..');
   await plasmaTransfer(plasmaAddr, amount, 0, plasmaWallet);

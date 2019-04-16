@@ -26,15 +26,12 @@
  */
 
 const ethers = require('ethers');
-const { getRootNetworkProvider } = require('./utils');
 
 const operatorAbi = require('../abis/operatorAbi');
 const governanceAbi = require('../abis/minGovAbi');
-
-const nodeUrl = process.env.NODE_URL || 'http://localhost:8645';
+const getWallet = require('./utils/wallet');
 
 const slotId = parseInt(process.env.SLOT) || 0;
-const privKey = process.env.PRIV_KEY;
 
 const getValidatorDetails = async (plasma) => {
   if (process.env.TENDER_ADDR) {
@@ -48,15 +45,11 @@ const getValidatorDetails = async (plasma) => {
 };
 
 async function run() {
-  const plasma = new ethers.providers.JsonRpcProvider(nodeUrl);
-  const nodeConfig = await plasma.send('plasma_getConfig', []);
-  const root = new ethers.providers.JsonRpcProvider(getRootNetworkProvider(nodeConfig));
-  const wallet = new ethers.Wallet(privKey, root);
-
+  const { plasmaWallet, rootWallet, nodeConfig } = await getWallet();
   const { operatorAddr } = nodeConfig;
 
-  const operator = new ethers.Contract(operatorAddr, operatorAbi, wallet);
-  const governance = new ethers.Contract(await operator.admin(), governanceAbi, wallet);
+  const operator = new ethers.Contract(operatorAddr, operatorAbi, rootWallet);
+  const governance = new ethers.Contract(await operator.admin(), governanceAbi, rootWallet);
   
   const epochLength = (await operator.epochLength()).toNumber();
   console.log('Current epoch length', epochLength);  
@@ -68,12 +61,12 @@ async function run() {
   
   console.log(`Setting slot ${slotId}..`);
   
-  const { ethAddress, tendermintAddress } = await getValidatorDetails(plasma); 
+  const { ethAddress, tendermintAddress } = await getValidatorDetails(plasmaWallet.provider); 
   const overloadedSlotId = `${operatorAddr}00000000000000000000000${slotId}`;
   await governance.setSlot(overloadedSlotId, ethAddress, `0x${tendermintAddress}`);
 
   console.log(`Funding validator account..`);
-  await wallet.sendTransaction({
+  await rootWallet.sendTransaction({
     to: ethAddress,
     value: ethers.utils.parseEther('1.0')
   });

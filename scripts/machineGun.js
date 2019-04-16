@@ -29,5 +29,8 @@ module.exports = run = async (numberOfTx, wallet) => {
 };
 
 if (require.main === module) {
-  run(process.env.NUM || 1, require('./utils/wallet')());
+  (async () => {
+    const { plasmaWallet } = await require('./utils/wallet')();
+    run(process.env.NUM || 1, plasmaWallet);
+  })();
 }
