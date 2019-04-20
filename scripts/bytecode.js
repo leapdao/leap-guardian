@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const ethers = require('ethers');
 const file = JSON.parse(require('fs').readFileSync(process.argv[2]));
 const contract = new ethers.ContractFactory(

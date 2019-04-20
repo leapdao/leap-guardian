@@ -3,6 +3,19 @@
   "version": "1.2.0",
   "author": "LeapDAO",
   "license": "MPL-2.0",
+  "bin": {
+    "leap-blockExplorer": "scripts/blockExplorer.js",
+    "leap-bytecode": "scripts/bytecode.js",
+    "leap-challengeExit": "scripts/challengeExit.js",
+    "leap-claimRewards": "scripts/claimRewards.js",
+    "leap-fundPlasmaAccount": "scripts/fundPlasmaAccount.js",
+    "leap-getAllUnspent": "scripts/getAllUnspent.js",
+    "leap-machineGun": "scripts/machineGun.js",
+    "leap-machineGunFun": "scripts/machineGunFun.js",
+    "leap-plasmaTransfer": "scripts/plasmaTransfer.js",
+    "leap-printPeriods": "scripts/printPeriods.js",
+    "leap-setValidator": "scripts/setValidator.js"
+  },
   "dependencies": {
     "ethereumjs-util": "^6.1.0",
     "ethers": "^4.0.27",

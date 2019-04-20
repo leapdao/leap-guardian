@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * Copyright (c) 2019-present, Leap DAO (leapdao.org)
  *
