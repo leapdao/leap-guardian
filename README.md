@@ -1,3 +1,5 @@
+![guardians](img/guardians.jpg)
+
 # leap-guardian
 Contains scripts to keep the angels busy...
 
