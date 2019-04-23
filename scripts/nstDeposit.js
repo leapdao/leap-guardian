@@ -57,14 +57,21 @@ async function run() {
 
     let tokenId = process.argv[3];
     let newData = process.argv[4];
+
     res = await nst.mint(wallet.address, tokenId, newData);
-    console.log(res);
+    console.log('mint', res);
     await res.wait();
+    console.log('minted');
+
     res = await nst.approve(exit.address, tokenId);
+    await res.wait();
+    console.log('approved');
+
     let color = (2**15 + 2**14) + 1;
     res = await exit.depositBySender(tokenId, color);
     console.log(res);
     await res.wait();
+    console.log('deposit');
 
     return;
   }
