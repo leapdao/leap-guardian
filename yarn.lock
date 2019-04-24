@@ -1360,15 +1360,16 @@ keccakjs@^0.2.1:
     browserify-sha3 "^0.0.4"
     sha3 "^1.2.2"
 
-leap-core@^0.28.3:
-  version "0.28.3"
-  resolved "https://registry.yarnpkg.com/leap-core/-/leap-core-0.28.3.tgz#6dbc8344eed119fb067b2a53a4a9aae37b861abe"
-  integrity sha512-9Rwo/5Uuo7sOCwmNTq1aksmUMjAkLg+Q/Im0NLDXGN/M53uXfJlAjJS2Xs/fL21iw4pK4wZKI4zpYy72xCdhAg==
+leap-core@0.30.0:
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/leap-core/-/leap-core-0.30.0.tgz#7efbb6710914e025de8407220cec6eeed6d56ae6"
+  integrity sha512-Ywu3htCVc1JaAbf8Gua9TGa2JpEHa63oikjSnJWNrssr8BzNELFUf5Lsezd9fRTK+5oH/nn9K2rr38QWbH7UcA==
   dependencies:
     "@types/web3" "^1.0.18"
     babel-polyfill "^6.26.0"
     ethereumjs-util "6.0.0"
     jsbi-utils "^1.0.0"
+    node-fetch "^2.3.0"
 
 lowercase-keys@^1.0.0:
   version "1.0.1"
@@ -1542,6 +1543,11 @@ nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
+
+node-fetch@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
+  integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
 
 npm-run-path@^2.0.0:
   version "2.0.2"
