@@ -28,35 +28,39 @@ async function run() {
 
   console.log({ nftTokenCount, nstTokenCount });
 
-  require('repl').start().context.exit = exit;
-
   exit.on(exit.filters.ExitStarted, console.log);
   exit.on(exit.filters.ExitStartedV2, console.log);
   exit.on(exit.filters.NewDeposit, console.log);
   exit.on(exit.filters.NewDepositV2, console.log);
   exit.on(exit.filters.NewToken, console.log);
 
-  let res;
-  //const _factory = new ethers.ContractFactory(
-  //  foo.abi,
-  //  foo.bytecode,
-  //  wallet
-  // );
-  //const nst = await _factory.deploy({ gasLimit: '0xfffff' });
-  //const c = await nst.deployed();
-  //console.log(c);
-  //console.log(nst);
-
   const cmd = process.argv[2];
-  const nstAddr = '0xda62386f177f7b493176ffe66352235589a78610';
+  const nstAddr = process.argv[3] || cmd;
   const nst = new ethers.Contract(nstAddr, Mint.abi, wallet);
 
-  if (cmd === 'mint') {
-    const nstAddr = '0xda62386f177f7b493176ffe66352235589a78610';
-    const nst = new ethers.Contract(nstAddr, Mint.abi, wallet);
+  let res;
 
+  if (cmd === 'deploy') {
+    const _factory = new ethers.ContractFactory(
+      Mint.abi,
+      Mint.bytecode,
+      wallet
+    );
+
+    console.log('deploying');
+    res = await _factory.deploy({ gasLimit: '0xfffff' });
+    console.log('waiting for deploy txHash:', res.deployTransaction.hash);
+    res = await res.deployed();
+    console.log(res);
+    console.log(_factory.address);
+    return;
+  }
+
+  if (cmd === 'mint') {
     let tokenId = process.argv[3];
     let newData = process.argv[4];
+
+    console.log({ tokenId, newData });
 
     res = await nst.mint(wallet.address, tokenId, newData);
     console.log('mint', res);
@@ -76,24 +80,15 @@ async function run() {
     return;
   }
 
-  // propose
-  // res = exit.interface.functions.registerNST.encode([nstAddr]);
-  let tokenId = '0x1111111111111111111111111111111111111111111111111111111111111111';
-  let newData = '0xfafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafa';
-  /*res = await bla.mint(wallet.address, tokenId, newData);
-  console.log(res);
-  await res.wait();
-  res = await bla.approve(exit.address, tokenId);
-  console.log(res);
-  await res.wait();*/
-
-  //let color = (2**15 + 2**14) + 1;
-  //res = await exit.depositBySender(tokenId, color);
-  //console.log(res);
-  //await res.wait();
+  if (cmd === 'propose') {
+    res = exit.interface.functions.registerToken.encode([nstAddr]);
+    console.log({ subject: exit.address, msgData: res });
+    return;
+  }
 
   let color = await provider.send('plasma_getColor', [nstAddr]);
   let address;// = wallet.address;
+
   res = await provider.send('plasma_unspent', [address, parseInt(color.replace('0x', ''), 16)]);
   console.log(res);
 }
