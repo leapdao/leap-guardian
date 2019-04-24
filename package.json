@@ -14,7 +14,8 @@
     "leap-machineGunFun": "scripts/machineGunFun.js",
     "leap-plasmaTransfer": "scripts/plasmaTransfer.js",
     "leap-printPeriods": "scripts/printPeriods.js",
-    "leap-setValidator": "scripts/setValidator.js"
+    "leap-setValidator": "scripts/setValidator.js",
+    "leap-nstDeposit": "scripts/nstDeposit.js"
   },
   "dependencies": {
     "csv-parser": "^2.2.0",
