@@ -57,8 +57,8 @@ async function run() {
   }
 
   if (cmd === 'mint') {
-    let tokenId = process.argv[3];
-    let newData = process.argv[4];
+    let tokenId = process.argv[4];
+    let newData = process.argv[5];
 
     console.log({ tokenId, newData });
 
@@ -81,7 +81,7 @@ async function run() {
   }
 
   if (cmd === 'propose') {
-    res = exit.interface.functions.registerToken.encode([nstAddr]);
+    res = exit.interface.functions.registerNST.encode([nstAddr]);
     console.log({ subject: exit.address, msgData: res });
     return;
   }
