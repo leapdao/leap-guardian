@@ -111,7 +111,7 @@ if (require.main === module) {
     run(
       process.env.TO, 
       process.env.QUEEN_ID, 
-      process.env.COLOR || 0,
+      process.env.NST_COLOR || 0,
       process.env.DATA,
       plasmaWallet,
     );
