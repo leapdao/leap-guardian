@@ -35,7 +35,7 @@ function replaceAll(str, find, replace) {
 const NST_COLOR_BASE = 49153;
 const BREED_COND = '6080604052348015600f57600080fd5b5060043610602b5760e060020a6000350463451da9f981146030575b600080fd5b605f60048036036060811015604457600080fd5b50803590600160a060020a0360208201351690604001356061565b005b6040805160e060020a63451da9f902815260048101859052600160a060020a038416602482015260448101839052905173123333333333333333333333333333333333333391829163451da9f99160648082019260009290919082900301818387803b15801560cf57600080fd5b505af115801560e2573d6000803e3d6000fd5b505050505050505056fea165627a7a72305820a41e3a0e694cf54b47c2c04a682a2894cd1d00fc915a711bd650de34c3288e060029';
 const TOKEN_TEMPLATE = '1233333333333333333333333333333333333333';
-const BREED_GAS_COST = BigInt(12054948);
+const BREED_GAS_COST = BigInt(12054948 + 2148176);
 
 const run = async (to, queenId, col, data, wallet) => {  
   const color = parseInt(col);
@@ -51,6 +51,13 @@ const run = async (to, queenId, col, data, wallet) => {
   const queenUtxos = await getUtxos(condAddr, color, wallet.provider);
   // todo: better selection, check at least one
   const queenUtxo = queenUtxos[0];
+  console.log(queenUtxo.output.data);
+  const counter = Buffer.from(queenUtxo.output.data.replace('0x', ''), 'hex').readUInt32BE(28);
+  const buffer2 = Buffer.alloc(32, 0);
+  buffer2.writeUInt32BE(counter + 1, 28);
+  const breedCounter = `0x${buffer2.toString('hex')}`;
+
+
 
   const gasUtxos = await getUtxos(condAddr, 0, wallet.provider);
   // todo: better selection
@@ -77,7 +84,7 @@ const run = async (to, queenId, col, data, wallet) => {
         queenId,
         condAddr,
         color,
-        '0x0000000000000000000000000000000000000000000000000000000000000002'
+        breedCounter
       ),
       new Output(
         `0x${predictedId}`,
