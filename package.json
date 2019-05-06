@@ -5,6 +5,7 @@
   "license": "MPL-2.0",
   "bin": {
     "leap-blockExplorer": "scripts/blockExplorer.js",
+    "leap-breed": "scripts/breed.js",
     "leap-bytecode": "scripts/bytecode.js",
     "leap-challengeExit": "scripts/challengeExit.js",
     "leap-claimRewards": "scripts/claimRewards.js",
@@ -15,6 +16,7 @@
     "leap-plasmaTransfer": "scripts/plasmaTransfer.js",
     "leap-printPeriods": "scripts/printPeriods.js",
     "leap-setValidator": "scripts/setValidator.js",
+    "leap-upgradeExitHandler": "scripts/upgradeExitHandler.js",
     "leap-nstDeposit": "scripts/nstDeposit.js"
   },
   "dependencies": {
@@ -25,6 +27,6 @@
     "jsbi": "^2.0.5",
     "leap-core": "0.30.1",
     "truffle-hdwallet-provider": "^1.0.6",
-    "web3": "1.0.0-beta.34"
+    "web3": "1.0.0-beta.37"
   }
 }
