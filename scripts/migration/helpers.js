@@ -7,7 +7,7 @@ const checkBalance = (addr, expectedBalance, rpc) =>
     getBalance(addr, rpc)
         .then(balance => ({
             addr,
-            result: String(balance) === expectedBalance,
+            result: String(balance) === String(expectedBalance),
             balance 
         }))
         .catch(e => {
@@ -74,9 +74,13 @@ async function sendFunds(from, to, amount, rpc) {
 
   const tx = Tx.transfer(inputs, outputs).signAll(from.priv);
 
+  let txHash;
   // eslint-disable-next-line no-console
-  console.log(`'eth_sendRawTransaction', [${tx.hex()}]`)
-  //const txHash = await rpc.send('eth_sendRawTransaction', [tx.hex()]);
+  if (process.env.DRY_RUN) {
+    console.log(`'eth_sendRawTransaction', [${tx.hex()}]`);
+  } else {
+    txHash = await rpc.send('eth_sendRawTransaction', [tx.hex()]);
+  }
   console.log('txHash:', txHash);
 }
 

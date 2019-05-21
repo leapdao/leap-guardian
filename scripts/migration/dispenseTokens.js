@@ -1,33 +1,33 @@
 const ethers = require('ethers');
+const { bufferToHex, privateToAddress, toBuffer } = require('ethereumjs-util');
 const { sendFunds, checkBalance, readSnapshot } = require('./helpers');
 
-const nodeUrl = process.argv[2]
-  ? process.argv[2]
-  : 'https://testnet-node.leapdao.org';
+const rpc = new ethers.providers.JsonRpcProvider(process.env.NODE_URL);
 
-const rpc = new ethers.providers.JsonRpcProvider(nodeUrl);
+const PRIV_KEY = process.env.PRIV_KEY;
+const from = bufferToHex(privateToAddress(toBuffer(PRIV_KEY)));
 
 const dispenser = {
-  address: 'PUT DISPENSER ADDRESS HERE',
-  priv: '!!!NEVER COMMIT WITH MAINNET PRIVATE KEY HERE!!!' //!!!NEVER COMMIT WITH MAINNET PRIVATE KEY HERE!!!
+  address: from,
+  priv: PRIV_KEY
 };
 const snapshot = './snapshot.csv';
 
 async function run() {
   const balances = await readSnapshot(snapshot);
-  for (let i = 0; i < balances.length; i += 15) {
+  for (let i = 0; i < balances.length; i++) {
     const record = balances[i];
     console.log('Dispensing', record.Balance, 'LEAP to', record.Address);
     let check = await checkBalance(record.Address, 0, rpc);
     if (!check.result) {
       console.log(` Address already funded(${check.balance}). Skipping.`);
       continue;
-    }
+    }    
     await sendFunds(dispenser, record.Address, record.Balance, rpc);
     check = await checkBalance(record.Address, record.Balance, rpc);
     if (!check.result) {
       console.log(
-        ` Failed! Expected: ${record.balance}). Actual: ${check.balance}`
+        ` Failed! Expected: ${record.Balance}). Actual: ${check.balance}`
       );
       return;
     }
