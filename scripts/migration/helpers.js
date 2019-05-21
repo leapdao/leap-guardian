@@ -68,7 +68,7 @@ async function sendFundsBatched(from, toArr, rpc) {
   }, BigInt(0));
 
   // calc inputs
-  const utxos = (await rpc.send("plasma_unspent", [from.address, 0]))
+  const utxos = (await rpc.send('plasma_unspent', [from.address, 0]))
     .map(u => ({
       output: u.output,
       outpoint: Outpoint.fromRaw(u.outpoint),
@@ -88,41 +88,15 @@ async function sendFundsBatched(from, toArr, rpc) {
     outputs = [];
   }
 
-  // add output for each faucet request
+  // add output for each destination
   outputs = outputs.concat(toArr.map(to => new Output(to.value, to.address, 0)));
   
   const tx = Tx.transfer(inputs, outputs).signAll(from.priv);
   let txHash;
-  // eslint-disable-next-line no-console
-  if (!process.env.DRY_RUN) {
-    txHash = await sendSignedTransaction(rpc, tx.hex());
-  }
+  
+  if (process.env.DRY_RUN) return;
+  const txHash = await sendSignedTransaction(rpc, tx.hex());
   console.log('txHash:', txHash);
 }
   
-
-async function sendFunds(from, to, amount, rpc) {
-  const utxos = (await rpc.send('plasma_unspent', [from.address])).map(u => ({
-    output: u.output,
-    outpoint: Outpoint.fromRaw(u.outpoint)
-  }));
-
-  if (utxos.length === 0) {
-    throw new Error('No tokens left in the dispenser wallet');
-  }
-
-  const inputs = helpers.calcInputs(utxos, from.address, amount, 0);
-
-  let outputs = helpers.calcOutputs(utxos, inputs, from.address, to, amount, 0);
-
-  const tx = Tx.transfer(inputs, outputs).signAll(from.priv);
-
-  let txHash;
-  // eslint-disable-next-line no-console
-  if (!process.env.DRY_RUN) {
-    txHash = await rpc.send('eth_sendRawTransaction', [tx.hex()]);
-  }
-  console.log('txHash:', txHash);
-}
-
-module.exports = { getBalance, getBalancesAll, sendFunds, readSnapshot, checkBalance, sendFundsBatched };
+module.exports = { getBalance, getBalancesAll, readSnapshot, checkBalance, sendFundsBatched };
