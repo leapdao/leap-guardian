@@ -24,7 +24,7 @@ async function run() {
       continue;
     }    
     await sendFunds(dispenser, record.Address, record.Balance, rpc);
-    check = await checkBalance(record.Address, record.Balance, rpc);
+    check = await checkBalance(record.Address, process.env.DRY_RUN ? 0 : record.Balance, rpc);
     if (!check.result) {
       console.log(
         ` Failed! Expected: ${record.Balance}). Actual: ${check.balance}`
