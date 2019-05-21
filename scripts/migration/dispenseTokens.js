@@ -1,6 +1,7 @@
 const ethers = require('ethers');
+const chunk = require('lodash.chunk');
 const { bufferToHex, privateToAddress, toBuffer } = require('ethereumjs-util');
-const { sendFunds, checkBalance, readSnapshot } = require('./helpers');
+const { sendFundsBatched, checkBalance, readSnapshot } = require('./helpers');
 
 const rpc = new ethers.providers.JsonRpcProvider(process.env.NODE_URL);
 
@@ -15,21 +16,28 @@ const snapshot = './snapshot.csv';
 
 async function run() {
   const balances = await readSnapshot(snapshot);
-  for (let i = 0; i < balances.length; i++) {
-    const record = balances[i];
-    console.log('Dispensing', record.Balance, 'LEAP to', record.Address);
-    let check = await checkBalance(record.Address, 0, rpc);
-    if (!check.result) {
-      console.log(` Address already funded(${check.balance}). Skipping.`);
-      continue;
-    }    
-    await sendFunds(dispenser, record.Address, record.Balance, rpc);
-    check = await checkBalance(record.Address, process.env.DRY_RUN ? 0 : record.Balance, rpc);
-    if (!check.result) {
-      console.log(
-        ` Failed! Expected: ${record.Balance}). Actual: ${check.balance}`
-      );
-      return;
+  const chunks = chunk(balances, 8);
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i];
+    let toArr = await Promise.all(
+      chunk
+        .map(to => ({ address: to.Address, value: to.Balance }))
+        .map(async to => {
+          let check = await checkBalance(to.address, 0, rpc);
+          if (!check.result) {
+            console.log(to.address, 'Skipping — already funded (', String(check.balance), ')');
+            return;
+          } else {
+            console.log(to.address, 'Dispensing ', to.value, 'LEAP');
+            return to;
+          }
+        })
+    );
+
+    toArr = toArr.filter(to => !!to)
+
+    if (toArr.length > 0) {
+        await sendFundsBatched(dispenser, toArr, rpc);
     }
   }
 }
