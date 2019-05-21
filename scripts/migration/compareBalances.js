@@ -1,4 +1,3 @@
-const JSBI = require('jsbi');
 const ethers = require('ethers');
 const fs = require('fs');
 const csv = require('csv-parser');
@@ -17,16 +16,14 @@ async function run() {
         balances.push(row);
     })
     .on('end', async () => {
-        let balance; 
-        for(let i = 0; i < balances.length; i++) {
-            console.log('Checking ballance of', balances[i].Address);
-            balance = await getBalance(balances[i].Address, rpc);
-            if (String(balance) === balances[i].Balance) {
-                console.log('   OK');
+        balances.forEach(async (record) => {
+            const balance = await getBalance(record.Address, rpc);
+            if (String(balance) === record.Balance) {
+                console.log(record.Address, '   OK');
             } else {
-                console.log('   Mismatch! Expected:', balances[i].Balance, 'actual: ', String(balance));
+                console.log(record.Address, '   Mismatch! Expected:', record.Balance, 'actual: ', String(balance));
             }
-        }        
+        })
     });  
 }
 
