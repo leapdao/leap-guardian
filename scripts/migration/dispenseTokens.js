@@ -1,42 +1,65 @@
-const JSBI = require('jsbi');
-const ethers = require('ethers');
-const fs = require('fs');
-const csv = require('csv-parser');
-const { sendFunds, getBalance } = require ('./helpers');
+const JSBI = require("jsbi");
+const ethers = require("ethers");
+const fs = require("fs");
+const csv = require("csv-parser");
+const { sendFunds, getBalance } = require("./helpers");
 
-const nodeUrl = process.argv[2] ? process.argv[2] : "https://testnet-node.leapdao.org";
+const nodeUrl = process.argv[2]
+  ? process.argv[2]
+  : "https://testnet-node.leapdao.org";
+
 const rpc = new ethers.providers.JsonRpcProvider(nodeUrl);
-const dispenser = { 
-    address: 'PUT DISPENSER ADDRESS HERE',
-    priv: '!!!NEVER COMMIT WITH MAINNET PRIVATE KEY HERE!!!' //!!!NEVER COMMIT WITH MAINNET PRIVATE KEY HERE!!!
-}
-const snapshot = './snapshot.csv';
+
+const dispenser = {
+  address: "PUT DISPENSER ADDRESS HERE",
+  priv: "!!!NEVER COMMIT WITH MAINNET PRIVATE KEY HERE!!!" //!!!NEVER COMMIT WITH MAINNET PRIVATE KEY HERE!!!
+};
+const snapshot = "./snapshot.csv";
 
 async function run() {
-    const balances = [];
-    let balance;
+  const balances = [];
+  let balance;
 
-    fs.createReadStream(snapshot)  
+  fs.createReadStream(snapshot)
     .pipe(csv())
-    .on('data', (row) => {
-        balances.push(row);
+    .on("data", row => {
+      balances.push(row);
     })
-    .on('end', async () => {
-        for(let i = 0; i < balances.length; i++) {
-            console.log('Dispensng', balances[i].Balance, 'LEAP to', balances[i].Address);
-            balance = await getBalance(balances[i].Address, rpc);
-            if (String(balance) !== '0') {
-                console.log('   Address already funded(', String(balance), '). Skipping.');
-                continue;
-            } 
-            await sendFunds(dispenser, balances[i].Address, balances[i].Balance, rpc);
-            balance = await getBalance(balances[i].Address, rpc);
-            if (String(balance) === balances[i].Balance) {
-                console.log('   Done');
-            } else {
-                console.log('   Failed! Expected balance:', balances[i].Balance, 'actual: ', String(balance));
-            }
-        }        
+    .on("end", async () => {
+      for (let i = 0; i < balances.length; i++) {
+        console.log(
+          "Dispensng",
+          balances[i].Balance,
+          "LEAP to",
+          balances[i].Address
+        );
+        balance = await getBalance(balances[i].Address, rpc);
+        if (String(balance) !== "0") {
+          console.log(
+            "   Address already funded(",
+            String(balance),
+            "). Skipping."
+          );
+          continue;
+        }
+        await sendFunds(
+          dispenser,
+          balances[i].Address,
+          balances[i].Balance,
+          rpc
+        );
+        balance = await getBalance(balances[i].Address, rpc);
+        if (String(balance) === balances[i].Balance) {
+          console.log("   Done");
+        } else {
+          console.log(
+            "   Failed! Expected balance:",
+            balances[i].Balance,
+            "actual: ",
+            String(balance)
+          );
+        }
+      }
     });
 }
 
