@@ -3,11 +3,7 @@ const ethers = require('ethers');
 const createCsvWriter = require('csv-writer').createArrayCsvWriter;
 const { getBalancesAll } = require('./helpers');
 
-const nodeUrl = process.argv[2]
-  ? process.argv[2]
-  : 'https://testnet-node.leapdao.org';
-  
-const rpc = new ethers.providers.JsonRpcProvider(nodeUrl);
+const rpc = new ethers.providers.JsonRpcProvider(process.env.NODE_URL);
 const snapshot = './snapshot.csv';
 
 async function run() {
