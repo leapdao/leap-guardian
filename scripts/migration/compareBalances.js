@@ -1,7 +1,5 @@
 const ethers = require('ethers');
-const fs = require('fs');
-const csv = require('csv-parser');
-const { getBalance } = require('./helpers');
+const { checkBalance, readSnapshot } = require('./helpers');
 
 const nodeUrl = process.argv[2]
   ? process.argv[2]
@@ -10,45 +8,21 @@ const nodeUrl = process.argv[2]
 const rpc = new ethers.providers.JsonRpcProvider(nodeUrl);
 const snapshot = './snapshot.csv';
 
-const readSnapshot = () =>
-  new Promise(resolve => {
-    const balances = [];
-    fs.createReadStream(snapshot)
-      .pipe(csv())
-      .on('data', row => {
-        balances.push(row);
-      })
-      .on('end', () => resolve(balances));
-  });
-
 async function run() {
-  const balances = await readSnapshot();
+  const balances = await readSnapshot(snapshot);
 
-  let match = true;
-
-  await Promise.all(
-    balances.map(async record => {
-      return getBalance(record.Address, rpc)
-        .then(balance => {
-          if (String(balance) === record.Balance) {
-            console.log(record.Address, 'OK');
-          } else {
-            match = false;
-            console.log(
-              record.Address,
-              'FAIL',
-              `Expected: ${record.Balance}, Actual: ${balance}`,
-            );
-          }
-        })
-        .catch(e => {
-          match = false;
-          console.log(record.Address, 'FAIL', e);
-        });
-    })
+  const results = await Promise.all(
+    balances.map(record => checkBalance(record.Address, record.Balance, rpc))
   );
 
-  console.log('Balance check:', match ? 'PASS' : 'FAIL (see above)');
+  results.map(r =>
+    console.log(`${r.addr} ${r.result ? 'OK' : 'FAIL'}, Balance: ${r.balance}`)
+  );
+
+  console.log(
+    'Balance check:',
+    results.find(r => !r.result) ? 'FAIL (see above)' : 'PASS'
+  );
 }
 
 run();

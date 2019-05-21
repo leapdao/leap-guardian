@@ -1,8 +1,35 @@
-const JSBI = require("jsbi");
-const { Tx, helpers, Output, Outpoint } = require("leap-core");
+const JSBI = require('jsbi');
+const fs = require('fs');
+const csv = require('csv-parser');
+const { Tx, helpers, Outpoint } = require('leap-core');
+
+const checkBalance = (addr, expectedBalance, rpc) =>
+    getBalance(addr, rpc)
+        .then(balance => ({
+            addr,
+            result: String(balance) === expectedBalance,
+            balance 
+        }))
+        .catch(e => {
+          console.error(e);
+          return { addr, result: false };
+        });
+
+
+const readSnapshot = (snapshotFile) =>
+  new Promise(resolve => {
+    const balances = [];
+    fs.createReadStream(snapshotFile)
+      .pipe(csv())
+      .on('data', row => {
+        balances.push(row);
+      })
+      .on('end', () => resolve(balances));
+  });
+
 
 async function getBalance(address, rpc) {
-  const response = await rpc.send("plasma_unspent", [address]);
+  const response = await rpc.send('plasma_unspent', [address]);
   const balance = response.reduce((sum, unspent) => {
     return unspent.output.color === 0
       ? JSBI.add(sum, JSBI.BigInt(unspent.output.value))
@@ -13,7 +40,7 @@ async function getBalance(address, rpc) {
 }
 
 async function getBalancesAll(rpc) {
-  const response = await rpc.send("plasma_unspent", []);
+  const response = await rpc.send('plasma_unspent', []);
   let balances = new Map();
   let value;
   let address;
@@ -32,13 +59,13 @@ async function getBalancesAll(rpc) {
 }
 
 async function sendFunds(from, to, amount, rpc) {
-  const utxos = (await rpc.send("plasma_unspent", [from.address])).map(u => ({
+  const utxos = (await rpc.send('plasma_unspent', [from.address])).map(u => ({
     output: u.output,
     outpoint: Outpoint.fromRaw(u.outpoint)
   }));
 
   if (utxos.length === 0) {
-    throw new Error("No tokens left in the dispenser wallet");
+    throw new Error('No tokens left in the dispenser wallet');
   }
 
   const inputs = helpers.calcInputs(utxos, from.address, amount, 0);
@@ -48,8 +75,9 @@ async function sendFunds(from, to, amount, rpc) {
   const tx = Tx.transfer(inputs, outputs).signAll(from.priv);
 
   // eslint-disable-next-line no-console
-  const txHash = await rpc.send("eth_sendRawTransaction", [tx.hex()]);
-  console.log("txHash:", txHash);
+  console.log(`'eth_sendRawTransaction', [${tx.hex()}]`)
+  //const txHash = await rpc.send('eth_sendRawTransaction', [tx.hex()]);
+  console.log('txHash:', txHash);
 }
 
-module.exports = { getBalance, getBalancesAll, sendFunds };
+module.exports = { getBalance, getBalancesAll, sendFunds, readSnapshot, checkBalance };
