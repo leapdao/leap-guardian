@@ -3,28 +3,28 @@ const ethers = require('ethers');
 const createCsvWriter = require('csv-writer').createArrayCsvWriter;
 const { getBalancesAll } = require('./helpers');
 
-const nodeUrl = process.argv[2] ? process.argv[2] : "https://testnet-node.leapdao.org";
-const rpc = new ethers.providers.JsonRpcProvider(nodeUrl);
+const rpc = new ethers.providers.JsonRpcProvider(process.env.NODE_URL);
 const snapshot = './snapshot.csv';
 
 async function run() {
-    const unspentsAll = await getBalancesAll(rpc);
-    console.log(unspentsAll);
-    
-    const totalValue = [...unspentsAll].reduce((sum, balance) => {
-        return JSBI.add(sum, JSBI.BigInt(balance[1])) }, JSBI.BigInt(0));
+  const unspentsAll = await getBalancesAll(rpc);
+  console.log(unspentsAll);
 
-    console.log("Total value of all addresses: ", String(totalValue));
+  const totalValue = [...unspentsAll].reduce((sum, balance) => {
+    return JSBI.add(sum, JSBI.BigInt(balance[1]));
+  }, JSBI.BigInt(0));
 
-    console.log('Writing balances data to CSV file');
-    const csvWriter = createCsvWriter({  
-        path: snapshot,
-        header: ['Address', 'Balance']
-    });
+  console.log('Total value of all addresses: ', String(totalValue));
 
-    csvWriter  
-        .writeRecords([...unspentsAll])
-        .then(() => console.log('The CSV file was written successfully'));
+  console.log('Writing balances data to CSV file');
+  const csvWriter = createCsvWriter({
+    path: snapshot,
+    header: ['Address', 'Balance']
+  });
+
+  csvWriter
+    .writeRecords([...unspentsAll])
+    .then(() => console.log('The CSV file was written successfully'));
 }
 
 run();
