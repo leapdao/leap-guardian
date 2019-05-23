@@ -92,7 +92,6 @@ async function sendFundsBatched(from, toArr, rpc) {
   outputs = outputs.concat(toArr.map(to => new Output(to.value, to.address, 0)));
   
   const tx = Tx.transfer(inputs, outputs).signAll(from.priv);
-  let txHash;
   
   if (process.env.DRY_RUN) return;
   const txHash = await sendSignedTransaction(rpc, tx.hex());
