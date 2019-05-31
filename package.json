@@ -25,7 +25,7 @@
     "ethereumjs-util": "^6.1.0",
     "ethers": "^4.0.27",
     "jsbi": "^2.0.5",
-    "leap-core": "0.31.1",
+    "leap-core": "0.32.0",
     "lodash.chunk": "^4.2.0",
     "truffle-hdwallet-provider": "^1.0.6",
     "web3": "1.0.0-beta.37"
