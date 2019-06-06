@@ -43,8 +43,9 @@ global.j = function (blockNumber) {
   provider.send('eth_getBlockByNumber', [blockNumber, true]).then((v) => printBlock(v));
 }
 
-global.w = async function () {
+global.watch = async function () {
   let lastBlockNum = await provider.getBlockNumber();
+  let lastTimestamp = 0;
 
   setInterval(
     async () => {
@@ -57,7 +58,11 @@ global.w = async function () {
 
         for (; i <= blockNum; i++) {
           const block = await provider.send('eth_getBlockByNumber', [i]);
-          console.log(`new block ${i} numTxs=${block.transactions.length}`);
+          const ts = parseInt(block.timestamp.replace('0x', ''), 16);
+          const deltaSeconds = ts - (lastTimestamp || ts);
+
+          lastTimestamp = ts;
+          console.log(`+${deltaSeconds} secs new block ${i} numTxs=${block.transactions.length}`);
         }
 
       }
