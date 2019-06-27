@@ -43,7 +43,7 @@ async function challenge(exitTxHash, spendTxHash, nodeUrl, privKey, validatorAdd
       exitProof,
       outputIndex,
       inputIndex
-  ).send({from: account.address, gas: 2000000});
+  ).send({from: account.address, gas: 400000, gasPrice: 15000000000 });
 
   console.log(res);
 }
