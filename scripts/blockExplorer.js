@@ -7,9 +7,8 @@
  */
 
 const ethers = require('ethers');
-const { helpers, Tx, Output, Outpoint } = require('leap-core');
 
-const nodeUrl = process.env.NODE_URL;
+const nodeUrl = process.env.NODE_URL || 'http://localhost:8645';
 let current = 0;
 
 function printBlock (block) {
