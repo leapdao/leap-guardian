@@ -1,409 +1,409 @@
 module.exports = [
   {
-    constant: true,
-    inputs: [
+    "constant": true,
+    "inputs": [
       {
-        name: '',
-        type: 'uint256',
-      },
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: 'slots',
-    outputs: [
+    "name": "slots",
+    "outputs": [
       {
-        name: 'eventCounter',
-        type: 'uint32',
+        "name": "eventCounter",
+        "type": "uint32"
       },
       {
-        name: 'owner',
-        type: 'address',
+        "name": "owner",
+        "type": "address"
       },
       {
-        name: 'stake',
-        type: 'uint64',
+        "name": "stake",
+        "type": "uint64"
       },
       {
-        name: 'signer',
-        type: 'address',
+        "name": "signer",
+        "type": "address"
       },
       {
-        name: 'tendermint',
-        type: 'bytes32',
+        "name": "tendermint",
+        "type": "bytes32"
       },
       {
-        name: 'activationEpoch',
-        type: 'uint32',
+        "name": "activationEpoch",
+        "type": "uint32"
       },
       {
-        name: 'newOwner',
-        type: 'address',
+        "name": "newOwner",
+        "type": "address"
       },
       {
-        name: 'newStake',
-        type: 'uint64',
+        "name": "newStake",
+        "type": "uint64"
       },
       {
-        name: 'newSigner',
-        type: 'address',
+        "name": "newSigner",
+        "type": "address"
       },
       {
-        name: 'newTendermint',
-        type: 'bytes32',
-      },
+        "name": "newTendermint",
+        "type": "bytes32"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'lastCompleteEpoch',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "lastCompleteEpoch",
+    "outputs": [
       {
-        name: '',
-        type: 'uint256',
-      },
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'epochLength',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "epochLength",
+    "outputs": [
       {
-        name: '',
-        type: 'uint256',
-      },
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'lastEpochBlockHeight',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "lastEpochBlockHeight",
+    "outputs": [
       {
-        name: '',
-        type: 'uint256',
-      },
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'bridge',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "bridge",
+    "outputs": [
       {
-        name: '',
-        type: 'address',
-      },
+        "name": "",
+        "type": "address"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'admin',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
       {
-        name: '',
-        type: 'address',
-      },
+        "name": "",
+        "type": "address"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'vault',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "vault",
+    "outputs": [
       {
-        name: '',
-        type: 'address',
-      },
+        "name": "",
+        "type": "address"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: false,
-        name: 'epoch',
-        type: 'uint256',
-      },
+        "indexed": false,
+        "name": "epoch",
+        "type": "uint256"
+      }
     ],
-    name: 'Epoch',
-    type: 'event',
+    "name": "Epoch",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: false,
-        name: 'epochLength',
-        type: 'uint256',
-      },
+        "indexed": false,
+        "name": "epochLength",
+        "type": "uint256"
+      }
     ],
-    name: 'EpochLength',
-    type: 'event',
+    "name": "EpochLength",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        name: 'signerAddr',
-        type: 'address',
+        "indexed": true,
+        "name": "signerAddr",
+        "type": "address"
       },
       {
-        indexed: true,
-        name: 'slotId',
-        type: 'uint256',
+        "indexed": true,
+        "name": "slotId",
+        "type": "uint256"
       },
       {
-        indexed: true,
-        name: 'tenderAddr',
-        type: 'bytes32',
+        "indexed": true,
+        "name": "tenderAddr",
+        "type": "bytes32"
       },
       {
-        indexed: false,
-        name: 'eventCounter',
-        type: 'uint256',
+        "indexed": false,
+        "name": "eventCounter",
+        "type": "uint256"
       },
       {
-        indexed: false,
-        name: 'epoch',
-        type: 'uint256',
-      },
+        "indexed": false,
+        "name": "epoch",
+        "type": "uint256"
+      }
     ],
-    name: 'ValidatorJoin',
-    type: 'event',
+    "name": "ValidatorJoin",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        name: 'signerAddr',
-        type: 'address',
+        "indexed": true,
+        "name": "signerAddr",
+        "type": "address"
       },
       {
-        indexed: true,
-        name: 'slotId',
-        type: 'uint256',
+        "indexed": true,
+        "name": "slotId",
+        "type": "uint256"
       },
       {
-        indexed: true,
-        name: 'tenderAddr',
-        type: 'bytes32',
+        "indexed": true,
+        "name": "tenderAddr",
+        "type": "bytes32"
       },
       {
-        indexed: false,
-        name: 'newSigner',
-        type: 'address',
+        "indexed": false,
+        "name": "newSigner",
+        "type": "address"
       },
       {
-        indexed: false,
-        name: 'eventCounter',
-        type: 'uint256',
+        "indexed": false,
+        "name": "eventCounter",
+        "type": "uint256"
       },
       {
-        indexed: false,
-        name: 'epoch',
-        type: 'uint256',
-      },
+        "indexed": false,
+        "name": "epoch",
+        "type": "uint256"
+      }
     ],
-    name: 'ValidatorLogout',
-    type: 'event',
+    "name": "ValidatorLogout",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        name: 'signerAddr',
-        type: 'address',
+        "indexed": true,
+        "name": "signerAddr",
+        "type": "address"
       },
       {
-        indexed: true,
-        name: 'slotId',
-        type: 'uint256',
+        "indexed": true,
+        "name": "slotId",
+        "type": "uint256"
       },
       {
-        indexed: true,
-        name: 'tenderAddr',
-        type: 'bytes32',
+        "indexed": true,
+        "name": "tenderAddr",
+        "type": "bytes32"
       },
       {
-        indexed: false,
-        name: 'epoch',
-        type: 'uint256',
-      },
+        "indexed": false,
+        "name": "epoch",
+        "type": "uint256"
+      }
     ],
-    name: 'ValidatorLeave',
-    type: 'event',
+    "name": "ValidatorLeave",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        name: 'signerAddr',
-        type: 'address',
+        "indexed": true,
+        "name": "signerAddr",
+        "type": "address"
       },
       {
-        indexed: true,
-        name: 'slotId',
-        type: 'uint256',
+        "indexed": true,
+        "name": "slotId",
+        "type": "uint256"
       },
       {
-        indexed: true,
-        name: 'tenderAddr',
-        type: 'bytes32',
+        "indexed": true,
+        "name": "tenderAddr",
+        "type": "bytes32"
       },
       {
-        indexed: false,
-        name: 'eventCounter',
-        type: 'uint256',
-      },
+        "indexed": false,
+        "name": "eventCounter",
+        "type": "uint256"
+      }
     ],
-    name: 'ValidatorUpdate',
-    type: 'event',
+    "name": "ValidatorUpdate",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        name: 'blocksRoot',
-        type: 'bytes32',
+        "indexed": true,
+        "name": "blocksRoot",
+        "type": "bytes32"
       },
       {
-        indexed: true,
-        name: 'slotId',
-        type: 'uint256',
+        "indexed": true,
+        "name": "slotId",
+        "type": "uint256"
       },
       {
-        indexed: false,
-        name: 'owner',
-        type: 'address',
+        "indexed": false,
+        "name": "owner",
+        "type": "address"
       },
       {
-        indexed: false,
-        name: 'periodRoot',
-        type: 'bytes32',
-      },
+        "indexed": false,
+        "name": "periodRoot",
+        "type": "bytes32"
+      }
     ],
-    name: 'Submission',
-    type: 'event',
+    "name": "Submission",
+    "type": "event"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_bridge',
-        type: 'address',
+        "name": "_bridge",
+        "type": "address"
       },
       {
-        name: '_vault',
-        type: 'address',
+        "name": "_vault",
+        "type": "address"
       },
       {
-        name: '_epochLength',
-        type: 'uint256',
-      },
+        "name": "_epochLength",
+        "type": "uint256"
+      }
     ],
-    name: 'initialize',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "name": "initialize",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_epochLength',
-        type: 'uint256',
-      },
+        "name": "_epochLength",
+        "type": "uint256"
+      }
     ],
-    name: 'setEpochLength',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "name": "setEpochLength",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_slotId',
-        type: 'uint256',
+        "name": "_slotId",
+        "type": "uint256"
       },
       {
-        name: '_signerAddr',
-        type: 'address',
+        "name": "_signerAddr",
+        "type": "address"
       },
       {
-        name: '_tenderAddr',
-        type: 'bytes32',
-      },
+        "name": "_tenderAddr",
+        "type": "bytes32"
+      }
     ],
-    name: 'setSlot',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "name": "setSlot",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_slotId',
-        type: 'uint256',
-      },
+        "name": "_slotId",
+        "type": "uint256"
+      }
     ],
-    name: 'activate',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "name": "activate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_slotId',
-        type: 'uint256',
+        "name": "_slotId",
+        "type": "uint256"
       },
       {
-        name: '_prevHash',
-        type: 'bytes32',
+        "name": "_prevHash",
+        "type": "bytes32"
       },
       {
-        name: '_blocksRoot',
-        type: 'bytes32',
-      },
+        "name": "_blocksRoot",
+        "type": "bytes32"
+      }
     ],
-    name: 'submitPeriod',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
+    "name": "submitPeriod",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ];
