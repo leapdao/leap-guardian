@@ -20,6 +20,7 @@
     "leap-nstDeposit": "scripts/nstDeposit.js"
   },
   "dependencies": {
+    "commander": "^2.20.0",
     "csv-parser": "^2.2.0",
     "csv-writer": "^1.2.0",
     "ethereumjs-util": "^6.1.0",
