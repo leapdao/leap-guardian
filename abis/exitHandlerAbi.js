@@ -1,5 +1,37 @@
 module.exports = [
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_amountOrTokenId",
+        "type": "uint256"
+      },
+      {
+        "name": "_color",
+        "type": "uint16"
+      }
+    ],
+    "name": "depositBySender",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_token",
+        "type": "address"
+      }
+    ],
+    "name": "registerNST",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "depositCount",
@@ -11,35 +43,26 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x2dfdf0b5"
+    "type": "function"
   },
   {
-    "constant": false,
+    "constant": true,
     "inputs": [
       {
-        "name": "_youngerInputProof",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "_exitingTxProof",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "_outputIndex",
-        "type": "uint8"
-      },
-      {
-        "name": "_inputIndex",
-        "type": "uint8"
+        "name": "",
+        "type": "uint32"
       }
     ],
-    "name": "challengeYoungestInput",
-    "outputs": [],
+    "name": "tokenData",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x374a5435"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "constant": true,
@@ -53,8 +76,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x3882f742"
+    "type": "function"
   },
   {
     "constant": true,
@@ -85,35 +107,21 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x5bae510d"
+    "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
+    "constant": true,
+    "inputs": [],
+    "name": "nstExitCounter",
+    "outputs": [
       {
-        "name": "_proof",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "_prevProof",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "_outputIndex",
-        "type": "uint8"
-      },
-      {
-        "name": "_inputIndex",
-        "type": "uint8"
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "challengeExit",
-    "outputs": [],
     "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x65f0b9b5"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "constant": false,
@@ -131,8 +139,7 @@ module.exports = [
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x6710b83f"
+    "type": "function"
   },
   {
     "constant": true,
@@ -146,8 +153,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x7695d79b"
+    "type": "function"
   },
   {
     "constant": true,
@@ -161,8 +167,21 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x78e70645"
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "nstTokenCount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "constant": false,
@@ -176,8 +195,7 @@ module.exports = [
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x90ac1866"
+    "type": "function"
   },
   {
     "constant": true,
@@ -191,46 +209,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x9eeaa7f4"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_exitStake",
-        "type": "uint256"
-      }
-    ],
-    "name": "setExitStake",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xac3d8558"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_bridge",
-        "type": "address"
-      },
-      {
-        "name": "_exitDuration",
-        "type": "uint256"
-      },
-      {
-        "name": "_exitStake",
-        "type": "uint256"
-      }
-    ],
-    "name": "initializeWithExit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xba27a911"
+    "type": "function"
   },
   {
     "constant": true,
@@ -244,23 +223,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xbc48bc22"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_color",
-        "type": "uint16"
-      }
-    ],
-    "name": "finalizeTopExit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xc215f1be"
+    "type": "function"
   },
   {
     "constant": false,
@@ -274,8 +237,7 @@ module.exports = [
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xc4d66de8"
+    "type": "function"
   },
   {
     "constant": false,
@@ -297,8 +259,7 @@ module.exports = [
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xd2d0e066"
+    "type": "function"
   },
   {
     "constant": true,
@@ -312,8 +273,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xd96ed505"
+    "type": "function"
   },
   {
     "constant": true,
@@ -332,8 +292,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xdb9ed47e"
+    "type": "function"
   },
   {
     "constant": true,
@@ -347,23 +306,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xe78cea92"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_exitDuration",
-        "type": "uint256"
-      }
-    ],
-    "name": "setExitDuration",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xeabd6868"
+    "type": "function"
   },
   {
     "constant": true,
@@ -382,8 +325,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xeefc3083"
+    "type": "function"
   },
   {
     "constant": true,
@@ -406,50 +348,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xf3c20de0"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_depositId",
-        "type": "uint256"
-      }
-    ],
-    "name": "startDepositExit",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function",
-    "signature": "0xf5239f64"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_youngestInputProof",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "_outputIndex",
-        "type": "uint8"
-      },
-      {
-        "name": "_inputIndex",
-        "type": "uint8"
-      }
-    ],
-    "name": "startExit",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function",
-    "signature": "0xf6169e35"
+    "type": "function"
   },
   {
     "constant": true,
@@ -463,8 +362,7 @@ module.exports = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xf851a440"
+    "type": "function"
   },
   {
     "constant": true,
@@ -499,12 +397,15 @@ module.exports = [
       {
         "name": "stake",
         "type": "uint256"
+      },
+      {
+        "name": "tokenData",
+        "type": "bytes32"
       }
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xffa696d3"
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -536,8 +437,7 @@ module.exports = [
       }
     ],
     "name": "ExitStarted",
-    "type": "event",
-    "signature": "0xaace06690e02011b548d8c5a74e1a678833d4136a56e657909fc6354bfb7c31f"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -564,8 +464,7 @@ module.exports = [
       }
     ],
     "name": "NewDeposit",
-    "type": "event",
-    "signature": "0x3fb288e5672e5fbbac19c54a77d8c562a521b069b922e16736f69e648ceb13a3"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -577,8 +476,39 @@ module.exports = [
       }
     ],
     "name": "MinGasPrice",
-    "type": "event",
-    "signature": "0x85feea100eda69e1c4fe1b228ed4d7229f3e9e9ebf7d30893d71de8165c46abb"
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "depositId",
+        "type": "uint32"
+      },
+      {
+        "indexed": true,
+        "name": "depositor",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "color",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "data",
+        "type": "bytes32"
+      }
+    ],
+    "name": "NewDepositV2",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -595,8 +525,57 @@ module.exports = [
       }
     ],
     "name": "NewToken",
-    "type": "event",
-    "signature": "0xfe74dea79bde70d1990ddb655bac45735b14f495ddc508cfab80b7729aa9d668"
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_bridge",
+        "type": "address"
+      },
+      {
+        "name": "_exitDuration",
+        "type": "uint256"
+      },
+      {
+        "name": "_exitStake",
+        "type": "uint256"
+      }
+    ],
+    "name": "initializeWithExit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_exitStake",
+        "type": "uint256"
+      }
+    ],
+    "name": "setExitStake",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_exitDuration",
+        "type": "uint256"
+      }
+    ],
+    "name": "setExitDuration",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "constant": false,
@@ -616,17 +595,106 @@ module.exports = [
       {
         "name": "_inputIndex",
         "type": "uint8"
-      },
-      {
-        "name": "signedData",
-        "type": "bytes32[]"
       }
     ],
-    "name": "startBoughtExit",
+    "name": "startExit",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
-    "type": "function",
-    "signature": "0x690505a7"
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_depositId",
+        "type": "uint256"
+      }
+    ],
+    "name": "startDepositExit",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_color",
+        "type": "uint16"
+      }
+    ],
+    "name": "finalizeExits",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_color",
+        "type": "uint16"
+      }
+    ],
+    "name": "finalizeTopExit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_proof",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "_prevProof",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "_outputIndex",
+        "type": "uint8"
+      },
+      {
+        "name": "_inputIndex",
+        "type": "uint8"
+      }
+    ],
+    "name": "challengeExit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_youngerInputProof",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "_exitingTxProof",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "_outputIndex",
+        "type": "uint8"
+      },
+      {
+        "name": "_inputIndex",
+        "type": "uint8"
+      }
+    ],
+    "name": "challengeYoungestInput",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
-]
+];
