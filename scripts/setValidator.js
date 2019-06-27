@@ -65,13 +65,13 @@ async function run() {
   
   const { ethAddress, tendermintAddress } = await getValidatorDetails(plasmaWallet.provider); 
   const overloadedSlotId = `${operatorAddr}00000000000000000000000${slotId}`;
-  await governance.setSlot(overloadedSlotId, ethAddress, `0x${tendermintAddress}`);
+  await governance.setSlot(overloadedSlotId, ethAddress, `0x${tendermintAddress}`).then(tx => tx.wait());
 
   console.log(`Funding validator account..`);
   await rootWallet.sendTransaction({
     to: ethAddress,
     value: ethers.utils.parseEther('1.0')
-  });
+  }).then(tx => tx.wait());;
 
   tx = await governance.finalize().then(tx => tx.wait());
   console.log('✅ Done');
