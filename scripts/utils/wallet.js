@@ -11,7 +11,7 @@ module.exports = async (params = {}) => {
   );
   const nodeConfig = await plasmaWallet.provider.send('plasma_getConfig', []);
   const rootWallet = new ethers.Wallet(
-    privKey, 
+    privKey,
     new ethers.providers.JsonRpcProvider(getRootNetworkProvider(nodeConfig)),
   );
 
