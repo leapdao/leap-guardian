@@ -42,7 +42,8 @@ async function challenge(exitTxHash, spendTxHash, nodeUrl, privKey, validatorAdd
       spendProof,
       exitProof,
       outputIndex,
-      inputIndex
+      inputIndex,
+      account.address,
   ).send({from: account.address, gas: 400000, gasPrice: 15000000000 });
 
   console.log(res);
