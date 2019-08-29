@@ -36,8 +36,8 @@ async function challenge(exitTxHash, spendTxHash, nodeUrl, privKey, validatorAdd
     }
   }
 
-  const exitProof = await helpers.getProof(plasmaWeb3, exitTx, 0, validatorAddr);
-  const spendProof = await helpers.getProof(plasmaWeb3, spendingTx, 0, validatorAddr);
+  const exitProof = await helpers.getProof(plasmaWeb3, exitTx);
+  const spendProof = await helpers.getProof(plasmaWeb3, spendingTx);
   const res = await exitHandler.methods.challengeExit(
       spendProof,
       exitProof,
