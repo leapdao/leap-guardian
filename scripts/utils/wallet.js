@@ -1,4 +1,5 @@
 const ethers = require('ethers');
+const LeapProvider = require('leap-provider');
 const getRootNetworkProvider = require('./getRootNetworkProvider');
 
 module.exports = async (params = {}) => {
@@ -7,7 +8,7 @@ module.exports = async (params = {}) => {
   console.log('Leap node: ', nodeUrl);
   const plasmaWallet = new ethers.Wallet(
     privKey, 
-    new ethers.providers.JsonRpcProvider(nodeUrl),
+    new LeapProvider(nodeUrl),
   );
   const nodeConfig = await plasmaWallet.provider.send('plasma_getConfig', []);
   const rootWallet = new ethers.Wallet(
