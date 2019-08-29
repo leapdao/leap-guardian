@@ -22,10 +22,8 @@
  * Example: NUM=5 NODE_URL=http://localhost:8645 PRIV_KEY=0xbd54b17c48ac1fc91d5ef2ef02e9911337f8758e93c801b619e5d178094486cc node scripts/machineGun.js
  */
 
-const { Tx, helpers } = require('leap-core');
+const { Tx } = require('leap-core');
 const getUtxos = require('./utils/getUtxos');
-
-const { sendSignedTransaction } = helpers;
 
 const run = async (to, amount, color, wallet) => {  
   const balance = await wallet.provider.getBalance(wallet.address).then(res => Number(res));
@@ -40,7 +38,7 @@ const run = async (to, amount, color, wallet) => {
     utxos, wallet.address, to, amount.toString(), color,
   ).signAll(wallet.privateKey);
 
-  await sendSignedTransaction(wallet.provider, tx.hex());
+  await wallet.provider.sendTransaction(tx).then(tx => tx.wait());
 }
 
 module.exports = run;

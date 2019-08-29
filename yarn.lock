@@ -1394,6 +1394,11 @@ leap-core@0.32.3:
     jsbi-utils "^1.0.0"
     node-fetch "^2.3.0"
 
+leap-provider@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/leap-provider/-/leap-provider-1.0.0.tgz#0798783b1c9fc8b5892fb183da857957d1cf9231"
+  integrity sha512-iawd6QLqJnszXMW+N0D/1wqS+LSctqa5iB8IZDtIP5nc5NTPy5Iie7m24dklQdeUut+WMdEExgWKVEmjWO8FZA==
+
 lodash.chunk@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.chunk/-/lodash.chunk-4.2.0.tgz#66e5ce1f76ed27b4303d8c6512e8d1216e8106bc"
