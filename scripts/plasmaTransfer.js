@@ -32,7 +32,7 @@ const run = async (to, amount, color, wallet) => {
     throw new Error(`Not enough balance for transfer. Send some tokens to ${wallet.address}`);
   }
 
-  const utxos = await getUtxos(wallet.address, color, wallet.provider);
+  const utxos = await wallet.provider.getUnspent(wallet.address, color);
 
   const tx = Tx.transferFromUtxos(
     utxos, wallet.address, to, amount.toString(), color,
