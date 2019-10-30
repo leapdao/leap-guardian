@@ -85,6 +85,20 @@ module.exports = [
   {
     "constant": true,
     "inputs": [],
+    "name": "implementation",
+    "outputs": [
+      {
+        "name": "impl",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "lastEpochBlockHeight",
     "outputs": [
       {
@@ -299,9 +313,14 @@ module.exports = [
         "type": "uint256"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "name": "owner",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "casRoot",
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -379,6 +398,32 @@ module.exports = [
       }
     ],
     "name": "activate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_slotId",
+        "type": "uint256"
+      },
+      {
+        "name": "_prevHash",
+        "type": "bytes32"
+      },
+      {
+        "name": "_blocksRoot",
+        "type": "bytes32"
+      },
+      {
+        "name": "_cas",
+        "type": "bytes32"
+      }
+    ],
+    "name": "submitPeriodWithCas",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
