@@ -39,6 +39,7 @@ const run = async (to, amount, color, wallet) => {
   ).signAll(wallet.privateKey);
 
   await wallet.provider.send('eth_sendRawTransaction', [tx.hex()]);
+  return tx.hash();
 }
 
 module.exports = run;

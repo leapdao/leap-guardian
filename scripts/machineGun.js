@@ -7,7 +7,7 @@
  * found in the LICENSE file in the root directory of this source tree.
  */
 
-/* eslint-disable no-await-in-loop, no-console */
+/* eslint-disable no-console */
 
 /**
  * Machine gun - script to add more transactions to the given network (usually to incite the next period submission).
@@ -23,9 +23,20 @@
 const plasmaTransfer = require('./plasmaTransfer');
 
 module.exports = run = async (numberOfTx, wallet) => {
-  for (let i = 0; i < numberOfTx; i += 1) {
-    process.stdout.write(`\r🔫 Machinegunning: ${i}/${numberOfTx}`);
-    await plasmaTransfer(wallet.address, 1, 0, wallet);
+
+  for (let i = 0; i < numberOfTx; i++) {
+    const hash = await plasmaTransfer(wallet.address, 1, 0, wallet);
+
+    let rounds = 5;
+    while (rounds--) {
+      let res = await wallet.provider.getTransaction(hash);
+      if (res && res.blockHash) {
+        receipt = res;
+        break;
+      }
+      await new Promise(resolve => setTimeout(() => resolve(), 100));
+    }
+    process.stdout.write(`\r🔫 Machinegunning: ${i+1}/${numberOfTx}`);
   }
   console.log();
 };
@@ -33,6 +44,6 @@ module.exports = run = async (numberOfTx, wallet) => {
 if (require.main === module) {
   (async () => {
     const { plasmaWallet } = await require('./utils/wallet')();
-    run(process.env.NUM || 1, plasmaWallet);
+    run(parseInt(process.env.NUM, 10) || 1, plasmaWallet);
   })();
 }
