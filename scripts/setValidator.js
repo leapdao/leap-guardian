@@ -21,6 +21,7 @@
  * NODE_URL    - JSON RPC endpoint of the Leap node
  * PRIV_KEY    - private key for ethereum account owning the network governance
  * SLOT        - (optional) validator slotId to set. Defaults to 0
+ * EPOCH_LENGTH - (optional) epoch length to set to. Default: SLOT if it is larger then current value, otherwise not used
  * TENDER_ADDR - (optional) tendermint validator address. If not specified, will be taken from the node
  * VAL_ADDR    - (optional) validator address. If not specified, will be taken from the node
  * 
@@ -34,6 +35,7 @@ const governanceAbi = require('../abis/minGovAbi');
 const getWallet = require('./utils/wallet');
 
 const slotId = parseInt(process.env.SLOT) || 0;
+let newEpochLength = parseInt(process.env.EPOCH_LENGTH) || 0;
 
 const getValidatorDetails = async (plasma) => {
   if (process.env.TENDER_ADDR) {
@@ -55,9 +57,13 @@ async function run() {
   
   const epochLength = (await operator.epochLength()).toNumber();
   console.log('Current epoch length', epochLength);  
-  if (epochLength <= slotId) {
-    console.log(`Setting epoch length to ${slotId + 1}..`);
-    const data = operator.interface.functions.setEpochLength.encode([slotId + 1])
+  if (!newEpochLength && epochLength <= slotId) {
+    newEpochLength = slotId + 1;
+  }
+
+  if (newEpochLength) {
+    console.log(`Setting epoch length to ${newEpochLength}..`);
+    const data = operator.interface.functions.setEpochLength.encode([newEpochLength])
     tx = await governance.propose(operatorAddr, data).then(tx => tx.wait());
   }
   
