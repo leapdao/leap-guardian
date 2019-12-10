@@ -28,7 +28,8 @@ async function onSubmission(blocksRoot, slotId, owner, casBitmap, periodRoot, tx
   const blocksPassed = currentBlockNumber - tx.blockNumber;
   const minutesPassed = ((blocksPassed * 16) / 60).toFixed(1);
 
-  console.log(`Ethereum block: ${tx.blockNumber} (~${minutesPassed} minutes ago) root: ${blocksRoot}`);
+  console.log(`Ethereum block: ${tx.blockNumber} (~${minutesPassed} minutes ago)` +
+  ` root: ${periodRoot} slot: ${slotId}`);
 }
 
 async function run() {
