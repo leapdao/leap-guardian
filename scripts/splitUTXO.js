@@ -31,7 +31,7 @@ const getUtxos = require('./utils/getUtxos');
 const { sendSignedTransaction, calcInputs, calcOutputs } = helpers;
 
 
-const to = [ 
+const to = process.env.TO ? [process.env.TO] : [ 
   '0x7b5b9137ebbd45bb8c2e5302772686bc24dfb71b',
   '0x516b68f095a072f3ea52ba2a538fa64db4ecbbc9',
   '0x1185e1e5dee16d97df612a7fc9e3d5677ce04c3a',
