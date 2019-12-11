@@ -22,12 +22,14 @@
 
 const plasmaTransfer = require('./plasmaTransfer');
 
-module.exports = run = async (numberOfTx, wallet) => {
+const defaultOpts = { silent: false };
+
+module.exports = run = async (numberOfTx, wallet, { silent } = defaultOpts) => {
   for (let i = 0; i < numberOfTx; i += 1) {
-    process.stdout.write(`\r🔫 Machinegunning: ${i}/${numberOfTx}`);
+    !silent && process.stdout.write(`\r🔫 Machinegunning: ${i}/${numberOfTx}`);
     await plasmaTransfer(wallet.address, 1, 0, wallet);
   }
-  console.log();
+  !silent && console.log();
 };
 
 if (require.main === module) {
