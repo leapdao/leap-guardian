@@ -158,7 +158,6 @@ const run = async (amount, num, wallet, color = 0, to) => {
     outputs.push(changeOutput);
   }
   const tx = Tx.transfer(inputs, outputs).signAll(wallet.privateKey);
-  console.log(JSON.stringify(tx.toJSON(), null, 2));
   await sendSignedTransaction(wallet.provider, tx.hex());
 }
 
@@ -168,8 +167,6 @@ if (require.main === module) {
   (async () => {
 
     const { plasmaWallet } = await require('./utils/wallet')();
-
-    console.log(plasmaWallet.address);
 
     for (let i = 0; i < to.length; i++) {
       const addr = to[i];
