@@ -61,10 +61,14 @@ async function run() {
     newEpochLength = slotId + 1;
   }
 
-  if (newEpochLength) {
+  if (newEpochLength && newEpochLength !== epochLength) {
     console.log(`Setting epoch length to ${newEpochLength}..`);
     const data = operator.interface.functions.setEpochLength.encode([newEpochLength])
     tx = await governance.propose(operatorAddr, data).then(tx => tx.wait());
+    if (newEpochLength > epochLength) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      tx = await governance.finalize().then(tx => tx.wait());
+    }
   }
   
   console.log(`Setting slot ${slotId}..`);
