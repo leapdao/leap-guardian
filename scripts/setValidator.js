@@ -9,7 +9,6 @@
 
 /* eslint-disable no-await-in-loop, no-console */
 
-
 /**
  * Sets given validator slotId on the given network. Changes epochLength if needed.
  * 
@@ -26,6 +25,7 @@
  * VAL_ADDR    - (optional) validator address. If not specified, will be taken from the node
  * 
  * Example: SLOT=1 PRIV_KEY=0xe0fb6e8a745d9f266410b51a9b2abb4f63ef7e6cd55a8328a76d095669088be2 node scripts/setValidator.js
+ * Example: SLOT=1 EPOCH_LENGTH=2 PRIV_KEY=0xe0fb6e8a745d9f266410b51a9b2abb4f63ef7e6cd55a8328a76d095669088be2 node scripts/setValidator.js
  */
 
 const ethers = require('ethers');
