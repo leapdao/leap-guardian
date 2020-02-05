@@ -29,13 +29,9 @@
  */
 
 const ethers = require('ethers');
+const { Tx } = require('leap-core');
 
-const operatorAbi = require('../abis/operatorAbi');
-const governanceAbi = require('../abis/minGovAbi');
-const getWallet = require('./utils/wallet');
-
-const slotId = parseInt(process.env.SLOT) || 0;
-let newEpochLength = parseInt(process.env.EPOCH_LENGTH) || 0;
+const { operatorAbi, exitHandlerAbi, heartbeatTokenAbi, minGovAbi } = require('../abis');
 
 const getValidatorDetails = async (plasma) => {
   if (process.env.TENDER_ADDR) {
@@ -48,21 +44,27 @@ const getValidatorDetails = async (plasma) => {
   }
 };
 
-async function run() {
-  const { plasmaWallet, rootWallet, nodeConfig } = await getWallet();
-  const { operatorAddr } = nodeConfig;
+async function run(slotId, tendermintAddress, ethAddress, newEpochLength = 0, { plasmaWallet, rootWallet, nodeConfig }) {
+  const msg = `\r${' '.repeat(100)}\rSetting validator slot ${slotId}:`;
+  const { operatorAddr, exitHandlerAddr } = nodeConfig;
 
   const operator = new ethers.Contract(operatorAddr, operatorAbi, rootWallet);
-  const governance = new ethers.Contract(await operator.admin(), governanceAbi, rootWallet);
+  const exitHandler = new ethers.Contract(exitHandlerAddr, exitHandlerAbi, rootWallet);
+  const heartbeatColor = await operator.heartbeatColor();
+  let heartbeatAddr, heartbeat;
+  if (heartbeatColor) {
+    [heartbeatAddr] = await exitHandler.tokens(heartbeatColor);
+    heartbeat = new ethers.Contract(heartbeatAddr, heartbeatTokenAbi, rootWallet);
+  }
+  const governance = new ethers.Contract(await operator.admin(), minGovAbi, rootWallet);
   
   const epochLength = (await operator.epochLength()).toNumber();
-  console.log('Current epoch length', epochLength);  
   if (!newEpochLength && epochLength <= slotId) {
     newEpochLength = slotId + 1;
   }
 
   if (newEpochLength && newEpochLength !== epochLength) {
-    console.log(`Setting epoch length to ${newEpochLength}..`);
+    process.stdout.write(`${msg} setting epoch length ${epochLength} → ${newEpochLength}`);
     const data = operator.interface.functions.setEpochLength.encode([newEpochLength])
     tx = await governance.propose(operatorAddr, data).then(tx => tx.wait());
     if (newEpochLength > epochLength) {
@@ -71,22 +73,46 @@ async function run() {
     }
   }
   
-  console.log(`Setting slot ${slotId}..`);
+  process.stdout.write(`${msg} setting slot`);
   
-  const { ethAddress, tendermintAddress } = await getValidatorDetails(plasmaWallet.provider); 
   const overloadedSlotId = `${operatorAddr}00000000000000000000000${slotId}`;
   await governance.setSlot(overloadedSlotId, ethAddress, `0x${tendermintAddress}`).then(tx => tx.wait());
+  if (heartbeatColor) {
+    process.stdout.write(`${msg} minting heartbeat token`);
+    const rsp = await heartbeat.mint(rootWallet.address, ethAddress, slotId).then(tx => tx.wait());
+    const tokenId = rsp.logs[0].topics[3];
+    process.stdout.write(`${msg} depositing heartbeat token`);
+    await heartbeat.approve(exitHandler.address, tokenId).then(tx => tx.wait());
+    await exitHandler.depositBySender(tokenId, heartbeatColor).then(tx => tx.wait());
+    let unspents = [];
+    while (!unspents.length) {
+      await new Promise(resolve => setInterval(resolve, 2000));    
+      unspents = await plasmaWallet.provider.getUnspent(rootWallet.address, heartbeatAddr);
+    }
+    let tx = Tx.transferFromUtxos(
+      unspents, rootWallet.address, ethAddress, tokenId, heartbeatColor,
+    ).signAll(rootWallet.privateKey);
 
-  console.log(`Funding validator account..`);
+    await plasmaWallet.provider.sendTransaction(tx).then(tx => tx.wait());
+  }
+
+  process.stdout.write(`${msg} funding validator account`);
   await rootWallet.sendTransaction({
     to: ethAddress,
     value: ethers.utils.parseEther('1.0')
   }).then(tx => tx.wait());;
 
   tx = await governance.finalize().then(tx => tx.wait());
-  console.log('✅ Done');
-  console.log('Current epoch length', (await operator.epochLength()).toNumber());
-  console.log(`Slot ${slotId}`, await operator.slots(slotId));
+  process.stdout.write(`${msg} done`);
+  console.log('');
 }
 
-run();
+module.exports = run;
+
+if (require.main === module) {
+  (async () => {
+    const env = await require('./utils/wallet')();
+    const { ethAddress, tendermintAddress } = await getValidatorDetails(env.plasmaWallet.provider); 
+    await run(process.env.SLOT, tendermintAddress, ethAddress, process.env.EPOCH_LENGTH, env);
+  })();
+}
