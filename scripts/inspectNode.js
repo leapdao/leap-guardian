@@ -15,12 +15,8 @@
  * Example: NODE_URL=http://localhost:8645 node scripts/inspectNode
  */
 
-const ethers = require('ethers');
 
-const OPERATOR_ABI = require('../abis/operatorAbi');
-const BRIDGE_ABI = require('../abis/bridgeAbi');
-
-async function run({ plasmaWallet, rootWallet, nodeConfig }) {
+async function run({ plasmaWallet }) {
   const blockHeight = await plasmaWallet.provider.getBlockNumber();
   console.log('Block height:', blockHeight);
 
