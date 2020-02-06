@@ -8,11 +8,11 @@
  */
 
  /**
- * Watch for and print new periods on the root chain.
+ * Print all the stored period data from the given node
  * 
  * NODE_URL - JSON RPC endpoint of the Leap node
  * 
- * Example: NNODE_URL=http://localhost:8645 node scripts/printPeriods
+ * Example: NODE_URL=http://localhost:8645 node scripts/inspectNode
  */
 
 const ethers = require('ethers');
