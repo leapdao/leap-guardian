@@ -73,10 +73,6 @@ async function run(slotId, tendermintAddress, ethAddress, newEpochLength = 0, { 
     }
   }
   
-  process.stdout.write(`${msg} setting slot`);
-  
-  const overloadedSlotId = `${operatorAddr}00000000000000000000000${slotId}`;
-  await governance.setSlot(overloadedSlotId, ethAddress, `0x${tendermintAddress}`).then(tx => tx.wait());
   if (heartbeatColor) {
     process.stdout.write(`${msg} minting heartbeat token`);
     const rsp = await heartbeat.mint(rootWallet.address, ethAddress, slotId).then(tx => tx.wait());
@@ -87,14 +83,18 @@ async function run(slotId, tendermintAddress, ethAddress, newEpochLength = 0, { 
     let unspents = [];
     while (!unspents.length) {
       await new Promise(resolve => setInterval(resolve, 2000));    
-      unspents = await plasmaWallet.provider.getUnspent(rootWallet.address, heartbeatAddr);
+      unspents = await plasmaWallet.provider.getUnspent(rootWallet.address, heartbeatColor);
     }
     let tx = Tx.transferFromUtxos(
       unspents, rootWallet.address, ethAddress, tokenId, heartbeatColor,
     ).signAll(rootWallet.privateKey);
-
     await plasmaWallet.provider.sendTransaction(tx).then(tx => tx.wait());
   }
+
+  process.stdout.write(`${msg} setting slot`);
+  
+  const overloadedSlotId = `${operatorAddr}00000000000000000000000${slotId}`;
+  await governance.setSlot(overloadedSlotId, ethAddress, `0x${tendermintAddress}`).then(tx => tx.wait());
 
   process.stdout.write(`${msg} funding validator account`);
   await rootWallet.sendTransaction({
