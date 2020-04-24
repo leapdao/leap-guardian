@@ -19,23 +19,24 @@
  * AMOUNT   - Amount to transfr
  * COLOR    - (optional) Color of the token. Defaults to 0 (LEAP)
  * 
- * Example: NUM=5 NODE_URL=http://localhost:8645 PRIV_KEY=0xbd54b17c48ac1fc91d5ef2ef02e9911337f8758e93c801b619e5d178094486cc node scripts/machineGun.js
+ * Example: TO=0xFbc827807D4E4F9574C546A5feE98abcd4e88b09 COLOR=4 AMOUNT=100000000000000000000 NODE_URL=https://testnet-node1.leapdao.org PRIV_KEY=0x00 node scripts/plasmaTransfer.js
  */
 
 const { Tx } = require('leap-core');
 const getUtxos = require('./utils/getUtxos');
 
 const run = async (to, amount, color, wallet) => {  
-  const balance = await wallet.provider.getBalance(wallet.address).then(res => Number(res));
-  
-  if (balance < amount) {
-    throw new Error(`Not enough balance for transfer. Send some tokens to ${wallet.address}`);
-  }
 
-  const utxos = await wallet.provider.getUnspent(wallet.address, color);
+  // this only works for color 0 :shrug:
+  // const balance = await wallet.provider.getBalance(wallet.address).then(res => Number(res));
+  // if (balance < amount) {
+  //   throw new Error(`Not enough balance for transfer. Send some tokens to ${wallet.address}`);
+  // }
+
+  const utxos = await wallet.provider.getUnspent(wallet.address, parseInt(color));
 
   const tx = Tx.transferFromUtxos(
-    utxos, wallet.address, to, amount.toString(), color,
+    utxos, wallet.address, to, amount.toString(), parseInt(color),
   ).signAll(wallet.privateKey);
 
   await wallet.provider.sendTransaction(tx).then(tx => tx.wait());
